@@ -3,7 +3,7 @@ import asyncio
 from aiogram import Bot
 from aiogram.types import ParseMode
 import config
-from misc.db import Database
+from misc.db import add_balance, check_user
 
 async def start():
 
@@ -13,7 +13,7 @@ async def start():
     except FileNotFoundError:
         last_lt = 0
 
-    bot = config.bot
+    bot = Bot(token=config.TOKEN_BOT)
 
     while True:
         await asyncio.sleep(2)
@@ -33,20 +33,20 @@ async def start():
 
             value = int(tx['in_msg']['value'])
             if value > 0:
-                uid = tx['in_msg']['message']
+                userid = tx['in_msg']['message']
 
-                if not uid.isdigit():
+                if not userid.isdigit():
                     continue
 
-                uid = int(uid)
-                
-                if not Database.check_user(uid):
+                userid = int(userid)
+
+                if not check_user(userid):
                     continue
 
-                Database.add_tonbalance(uid, value)
+                add_balance(userid, value)
 
-                await bot.send_message(uid, 'Пополнение прошло успешно.\nПополнено:'
-                                      f'*{value / 1e9:.2f} TON*',
+                await bot.send_message(userid, 'Пополнение прошло успешно!\n'
+                                      f'*+{value / 1e9:.2f} TON*',
                                       parse_mode=ParseMode.MARKDOWN)
 
             last_lt = lt
