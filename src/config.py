@@ -1,25 +1,19 @@
-from aiogram import Bot
-from aiogram.dispatcher import Dispatcher
 import os
 from dotenv import load_dotenv
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from misc.db import Database
-from aiogram import types
-
-storage=MemoryStorage()
-
 load_dotenv()
 
-token = os.getenv('TOKEN_BOT')
-
-DEPOSIT_ADDRESS = 'your_wallet_address'
+TOKEN_BOT = os.getenv('TOKEN_BOT')
+DEPOSIT_ADDRESS = os.getenv('deposit_address')
 API_KEY = os.getenv('apikey')
-RUN_IN_MAINNET = False  # Ставь True/False чтобы сменить mainnet или testnet
+RUN_IN_MAINNET = False  # Установите True/False, чтобы переключиться на mainnet или testnet
 
 if RUN_IN_MAINNET:
     API_BASE_URL = 'https://toncenter.com'
 else:
     API_BASE_URL = 'https://testnet.toncenter.com'
 
-bot = Bot(token);
-dp = Dispatcher(bot)
+MYSQL_HOST = os.getenv('mysql_host')
+MYSQL_PORT = int(os.getenv('mysql_port'))
+MYSQL_USER = os.getenv('mysql_user')
+MYSQL_PASSWORD = os.getenv('mysql_password')
+MYSQL_DATABASE = os.getenv('mysql_database')
