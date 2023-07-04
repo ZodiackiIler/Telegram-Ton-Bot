@@ -8,6 +8,8 @@
 Оповещение пользователя о подтверждении пополнения баланса.</p>
 
 # Установка 
+`git clone https://github.com/ZodiackiIler/Telegram-Ton-Bot.git`
+`cd src`
 `pip install -r requirements.txt`
 
 # Настройка
