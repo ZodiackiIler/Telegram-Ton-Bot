@@ -6,8 +6,6 @@ from aiogram.types import ParseMode, ReplyKeyboardMarkup, KeyboardButton, \
                           InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils import executor
 
-import config
-from misc.transaction import *
 from misc.transaction import *
 from misc.db import *
 from config import *
@@ -19,18 +17,16 @@ async def welcome_handler(message: types.Message):
 
     uid = message.from_user.id  
     username = message.from_user.username
-    toncoin = "0"
 
     if not db.check_user(uid):
-        db.add_user(uid, username, toncoin)
+        db.add_user(uid, username)
 
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.row(KeyboardButton('Deposit'))
     keyboard.row(KeyboardButton('Balance'))
 
     await message.answer('Привет!\nЯ пример бота, мой исходный код в [GitHub](https://'
-                     'github.com/ZodiackiIler/Telegram-Ton-Bot/'
-                     '\n'
+                     'github.com/ZodiackiIler/Telegram-Ton-Bot/).\n'
                      'Моя цель - показать, насколько просто получать '
                      'платежи в Ton с помощью Python.\n\n'
                      'Используйте клавиатуру, чтобы протестировать мою функциональность.',
