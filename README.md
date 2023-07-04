@@ -236,10 +236,18 @@ def register_handlers_ton(dp):
 <p>Проект может быть использован в качестве основы для разработки Telegram-бота с функционалом работы с криптовалютой Ton и базой данных MySQL.</p>
 
 # Пример
-<img src="https://github.com/ZodiackiIler/Telegram-Ton-Bot/images/image1.jpg" >
+<p align="center">
+<img src="https://github.com/ZodiackiIler/Telegram-Ton-Bot/blob/main/images/image1.jpg">
+</p>
 
-<img src="https://github.com/ZodiackiIler/Telegram-Ton-Bot/images/image2.jpg">
+<p align="center">
+<img src="https://github.com/ZodiackiIler/Telegram-Ton-Bot/blob/main/images/image2.jpg">
+</p>
 
-<img src="https://github.com/ZodiackiIler/Telegram-Ton-Bot/images/image3.jpg">
+<p align="center">
+<img src="https://github.com/ZodiackiIler/Telegram-Ton-Bot/blob/main/images/image3.jpg">
+</p>
 
-<img src="https://github.com/ZodiackiIler/Telegram-Ton-Bot/images/image4.jpg" >
+<p align="center">
+<img src="https://github.com/ZodiackiIler/Telegram-Ton-Bot/blob/main/images/image4.jpg">
+</p>
