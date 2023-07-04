@@ -1,66 +1,43 @@
-import os
 import mysql.connector
-from dotenv import load_dotenv
+from mysql.connector import Error
+from config import MYSQL_DATABASE, MYSQL_HOST, MYSQL_PASSWORD, MYSQL_PORT, MYSQL_USER 
 
-load_dotenv()
+try:
+    connection = mysql.connector.connect(
+    host=MYSQL_HOST,
+    port=MYSQL_PORT,
+    user=MYSQL_USER,
+    password=MYSQL_PASSWORD,
+    database=MYSQL_DATABASE
+)
+    cursor = connection.cursor()
+    print("Successfully connected to MySQL database")
+except Error as e:
+    print("Error connecting to MySQL database:", e)
 
-db_config = {
-    'host': os.getenv('mysql_host'),
-    'port': os.getenv('mysql_port'),
-    'user': os.getenv('mysql_user'),
-    'password': os.getenv('mysql_password'),
-    'database': os.getenv('mysql_database')
-}
+cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                user_id INTEGER,
+                username VARCHAR(255),
+                toncoin INTEGER
+            )''')
+connection.commit()
 
-class Database:
-    def __init__(self, db_config):
-        try:
-            self.connection = mysql.connector.connect(**db_config)
-            self.cursor = self.connection.cursor()
+def check_user(userid):
+    cursor.execute(f'SELECT * FROM users WHERE user_id = {userid}')
+    user = cursor.fetchone()
+    if user:
+        return True
+    return False
 
-            # Create the "users" table if it doesn't exist
-            self.cursor.execute(
-                '''
-                CREATE TABLE IF NOT EXISTS users (
-                    user_id INT PRIMARY KEY,
-                    username VARCHAR(255),
-                    toncoin DECIMAL(18, 9) DEFAULT 0
-                )
-                '''
-            )
-        except mysql.connector.Error as error:
-            print("Ошибка подключения к базе данных:", error)
+def add_user(userid, username, toncoin):
+    cursor.execute(f"INSERT INTO users (user_id, username, toncoin) VALUES ({userid}, '{username}', {toncoin})")
+    connection.commit()
 
-    def check_user(self, uid):
-        self.cursor.execute(f'SELECT * FROM users WHERE user_id = {uid}')
-        user = self.cursor.fetchone()
-        if user:
-            return True
-        return False
-    
-    def get_tonbalance(self, uid):
-        if not self.connection.is_connected():
-            self.connection.reconnect()
-            self.cursor = self.connection.cursor()
-        self.cursor.execute(f'SELECT toncoin FROM users WHERE user_id = {uid}')
-        balance = self.cursor.fetchone()[0]
-        return balance
+def get_balance(userid):
+    cursor.execute(f'SELECT toncoin FROM users WHERE user_id = {userid}')
+    balance = cursor.fetchone()[0]
+    return balance
 
-    def add_tonbalance(self, uid, amount):
-        self.cursor.execute(f'UPDATE users SET toncoin= toncoin + {amount} WHERE user_id = {uid}')
-        self.connection.commit()
-
-    def user_exists(self, uid):
-        with self.connection:
-            self.cursor.execute(f'SELECT * FROM users WHERE user_id = {uid}')
-            result = self.cursor.fetchall()
-            return bool(len(result))
-
-    def add_user(self, uid, username):
-        with self.connection:
-            query = "INSERT INTO users (user_id, username) VALUES (%s, %s)"
-            values = (uid, username)
-            self.cursor.execute(query, values)
-            self.connection.commit()
-
-db = Database(db_config)
+def add_balance(userid, amount):
+    cursor.execute(f'UPDATE users SET toncoin = toncoin + {amount} WHERE user_id = {userid}')
+    connection.commit()
